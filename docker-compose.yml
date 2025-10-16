@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  sc-gateway:
+    image: mimjae98/sc-gateway:0.2
+    container_name: sc-gateway
+    ports:
+      - "9000:9000"
+    restart: always
+
