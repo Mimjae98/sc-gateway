@@ -1,0 +1,32 @@
+server:
+  port: 9000   # 게이트웨이 외부 진입 포트 (주석 설명대로 9000 사용)
+
+spring:
+  application:
+    name: sc-gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            # 1) /hello -> 백엔드 8765 로 그대로 전달
+            - id: hello_route
+              uri: http://localhost:8765
+              predicates:
+                - Path=/hello   # 정확히 /hello 만 매칭 (원하면 /hello/** 로 바꿔)
+
+            # 2) /abc -> 백엔드 8765 로 /abc 그대로 전달
+            - id: abc2hello_route
+              uri: http://localhost:8765
+              predicates:
+                - Path=/abc     # 정확히 /abc
+
+            # 3) /def -> 경로를 /hello 로 리라이트하여 8765로 전달
+            - id: def2hello_route
+              uri: http://localhost:8765
+              predicates:
+                - Path=/def
+              filters:
+                - RewritePath=/def,/hello  # 쉼표 뒤에 공백 넣지 마!
+
